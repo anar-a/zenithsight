@@ -16,6 +16,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Zenithsight">
         <activity
+            android:name=".ResultActivity"
+            android:exported="false" />
+        <activity
             android:name=".PreviewPage"
             android:exported="false" />
         <activity

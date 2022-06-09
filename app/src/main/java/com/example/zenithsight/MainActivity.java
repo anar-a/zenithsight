@@ -10,6 +10,7 @@ import android.widget.Button;
 public class MainActivity extends AppCompatActivity {
     private Button takePictureB;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,8 +27,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void switchPreviewActivity() {
-        Intent intent = new Intent(this, PreviewPage.class);
-        startActivity(intent);
+        Intent previewIntent = new Intent(this, PreviewPage.class);
+        previewIntent.putExtra("test", 1);
+        startActivity(previewIntent);
     }
 
 
