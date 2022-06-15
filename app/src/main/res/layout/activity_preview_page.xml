@@ -6,12 +6,43 @@
     android:layout_height="match_parent"
     tools:context=".PreviewPage">
 
-<androidx.camera.view.PreviewView
-    android:id="@+id/previewView"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" />
+    <androidx.camera.view.PreviewView
+        android:id="@+id/previewView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-<LinearLayout
+    </androidx.camera.view.PreviewView>
+
+    <TextView
+        android:id="@+id/progressText"
+        android:layout_width="263dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:shadowColor="#000000"
+        android:shadowRadius="0"
+        android:text="Progress"
+        android:textAlignment="center"
+        android:textColor="#959595"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/imageProgress"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="244dp"
+        android:layout_height="27dp"
+        android:layout_marginTop="60dp"
+        android:progress="0"
+        android:progressBackgroundTint="#7A7A7A"
+        android:progressBackgroundTintMode="screen"
+        android:scaleY="3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/previewView" />
+
+    <LinearLayout
     android:id="@+id/linearLayout2"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"

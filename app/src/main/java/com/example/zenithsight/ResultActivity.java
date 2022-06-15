@@ -28,7 +28,7 @@ public class ResultActivity extends AppCompatActivity {
         );
 
 
-        resultDisplay.setRotation(90);
+        //resultDisplay.setRotation(90);
         resultDisplay.setImageBitmap(resultImage);
     }
 }
