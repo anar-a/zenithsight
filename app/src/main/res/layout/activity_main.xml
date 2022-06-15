@@ -43,19 +43,19 @@
 
     <TextView
         android:id="@+id/textView4"
-        android:layout_width="159dp"
-        android:layout_height="35dp"
+        android:layout_width="198dp"
+        android:layout_height="33dp"
         android:layout_marginTop="220dp"
-        android:text="Delay Between"
+        android:text="Delay Between (s)"
         android:textAlignment="textStart"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.146"
+        app:layout_constraintHorizontal_bias="0.169"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/editTextNumber2"
+        android:id="@+id/imageCount"
         android:layout_width="100dp"
         android:layout_height="57dp"
         android:layout_marginEnd="60dp"
@@ -66,7 +66,7 @@
         app:layout_constraintTop_toTopOf="@+id/textView3" />
 
     <EditText
-        android:id="@+id/editTextNumber3"
+        android:id="@+id/delayBetween"
         android:layout_width="101dp"
         android:layout_height="55dp"
         android:layout_marginEnd="60dp"

@@ -52,8 +52,8 @@ public class PreviewPage extends AppCompatActivity {
 
     private boolean imageFinished = true;
 
-    int numImages = 3;
-    int delay = 1000; //ms
+    int numImages;
+    int delay; //ms
     Bitmap resultImage = null;
 
     boolean cancelOperation;
@@ -87,8 +87,10 @@ public class PreviewPage extends AppCompatActivity {
             }
         }, ContextCompat.getMainExecutor(this));
 
-
         cancelOperation = false;
+        Intent currentIntent = getIntent(); // retrieving extended data
+        numImages = currentIntent.getIntExtra("imageCount", 1);
+        delay = currentIntent.getIntExtra("delayBetween", 1) * 1000;
 
         returnB = (Button) findViewById(R.id.backButton);
         returnB.setOnClickListener(new View.OnClickListener(){
@@ -106,6 +108,7 @@ public class PreviewPage extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (imageFinished == true){
+                    // preview feed black
                     if (previewView.getPreviewStreamState().getValue() == PreviewView.StreamState.IDLE) {
                         System.out.println("Preview not ready");
                         return;
@@ -116,6 +119,7 @@ public class PreviewPage extends AppCompatActivity {
 
                     imageFinished = false; // image taking debounce
 
+                    // recycle previous bitmap
                     if (resultImage != null){
                         resultImage.recycle();
                         resultImage = null;
@@ -126,8 +130,6 @@ public class PreviewPage extends AppCompatActivity {
                 }
             }
         });
-
-        Intent currentIntent = getIntent(); // retrieving extended data
     }
 
     private void startCameraX(ProcessCameraProvider cameraProvider) {
@@ -192,16 +194,16 @@ public class PreviewPage extends AppCompatActivity {
                 }
 
                 System.out.println("4");
-                // add to the mean
+                // add to the mean; cancelOperation true if return button pressed
                 for (int x = 0; x < resultImage.getWidth() && !cancelOperation; x++){
                     for (int y = 0; y < resultImage.getHeight() && !cancelOperation; y++){
                         Color currColor = bmp.getColor(x, y);
                         Color currentMean = resultImage.getColor(x, y);
 
                         resultImage.setPixel(x, y, Color.rgb(
-                                currColor.red()/numImages + currentMean.red(),
-                                currColor.green()/numImages + currentMean.green(),
-                                currColor.blue()/numImages + currentMean.blue()
+                                currColor.red()/ numImages + currentMean.red(),
+                                currColor.green()/ numImages + currentMean.green(),
+                                currColor.blue()/ numImages + currentMean.blue()
                                 ));
                     }
 
