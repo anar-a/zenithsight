@@ -1,5 +1,7 @@
 package com.example.zenithsight;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.camera.core.Camera;
@@ -10,9 +12,11 @@ import androidx.camera.core.ImageProxy;
 import androidx.camera.core.Preview;
 import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.camera.view.PreviewView;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LifecycleOwner;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -50,6 +54,9 @@ public class PreviewPage extends AppCompatActivity {
     private PreviewView previewView;
     private ImageCapture imageCapture;
 
+    private static final int CAMERA_PERMISSION_CODE = 100;
+    private static final int STORAGE_PERMISSION_CODE = 101;
+
     private boolean imageFinished = true;
 
     int numImages;
@@ -71,6 +78,8 @@ public class PreviewPage extends AppCompatActivity {
 
         imageProgress.setVisibility(View.INVISIBLE);
         progressText.setVisibility(View.INVISIBLE);
+
+        requestPermissionLauncher.launch(Manifest.permission.CAMERA);
 
         camProviderFuture = ProcessCameraProvider.getInstance(this);
         camProviderFuture.addListener(() -> {
@@ -158,11 +167,8 @@ public class PreviewPage extends AppCompatActivity {
                 return;
             }
             else {
-                System.out.println("Pic num: " + currentPic);
                 onTakeImage(currentPic);
 
-                //Timer nextTimer = new Timer();
-                //nextTimer.schedule(new picTask(), delay);
             }
         }
     };
@@ -186,14 +192,12 @@ public class PreviewPage extends AppCompatActivity {
 
                     // reset all pixels to 0,0,0
                     for (int x = 0; x < resultImage.getWidth(); x++){
-                        System.out.println("X: " + x);
                         for (int y = 0; y < resultImage.getHeight(); y++){
                             resultImage.setPixel(x, y, Color.rgb(0, 0, 0));
                         }
                     }
                 }
 
-                System.out.println("4");
                 // add to the mean; cancelOperation true if return button pressed
                 for (int x = 0; x < resultImage.getWidth() && !cancelOperation; x++){
                     for (int y = 0; y < resultImage.getHeight() && !cancelOperation; y++){
@@ -209,7 +213,6 @@ public class PreviewPage extends AppCompatActivity {
 
                 }
 
-                System.out.println("Complete");
                 bmp.recycle();
                 image.close();
 
@@ -255,5 +258,12 @@ public class PreviewPage extends AppCompatActivity {
         startActivity(resultIntent);
 
     }
+
+    private ActivityResultLauncher<String> requestPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+                if (!isGranted){
+                    finish();
+                }
+            });
 
 }
