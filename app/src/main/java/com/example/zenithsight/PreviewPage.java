@@ -58,12 +58,13 @@ public class PreviewPage extends AppCompatActivity {
     private static final int STORAGE_PERMISSION_CODE = 101;
 
     private boolean imageFinished = true;
+    private boolean hasReturned = false;
 
-    int numImages;
-    int delay; //ms
-    Bitmap resultImage = null;
+    private int numImages;
+    private int delay; //ms
+    private Bitmap resultImage = null;
 
-    boolean cancelOperation;
+    private boolean cancelOperation;
 
     private int currentPic = 0;
 
@@ -78,6 +79,8 @@ public class PreviewPage extends AppCompatActivity {
 
         imageProgress.setVisibility(View.INVISIBLE);
         progressText.setVisibility(View.INVISIBLE);
+
+        hasReturned = false;
 
         requestPermissionLauncher.launch(Manifest.permission.CAMERA);
 
@@ -106,6 +109,7 @@ public class PreviewPage extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 cancelOperation = true;
+                hasReturned = true;
                 finish(); // Exit preview screen
             }
         });
@@ -155,7 +159,9 @@ public class PreviewPage extends AppCompatActivity {
                 .setTargetResolution(new Size(1280, 720))
                 .build();
 
-        cameraProvider.bindToLifecycle((LifecycleOwner) this, cameraSelector, preview, imageCapture);
+        if (!hasReturned){ // fix crash on return clicked before preview displayed (bind after intent exit)
+            cameraProvider.bindToLifecycle((LifecycleOwner) this, cameraSelector, preview, imageCapture);
+        }
     }
 
     private class picTask extends TimerTask {
@@ -252,7 +258,7 @@ public class PreviewPage extends AppCompatActivity {
 
         Intent resultIntent = new Intent(this, ResultActivity.class);
         ByteArrayOutputStream resultStream = new ByteArrayOutputStream();
-        resultImage.compress(Bitmap.CompressFormat.PNG, 50, resultStream);
+        resultImage.compress(Bitmap.CompressFormat.PNG, 0, resultStream);
 
         resultIntent.putExtra("byteArray", resultStream.toByteArray());
         startActivity(resultIntent);

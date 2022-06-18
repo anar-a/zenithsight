@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
@@ -34,6 +35,7 @@ public class ResultActivity extends AppCompatActivity {
     private Button returnPreviewB;
 
     private Snackbar noPermissionWarning;
+
 
     private ActivityResultLauncher<String> requestPermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
@@ -93,6 +95,9 @@ public class ResultActivity extends AppCompatActivity {
 
                     try {
                         FileOutputStream imageOut = new FileOutputStream(imageFile);
+
+                        resultImage = rotateBmp(resultImage, 90); // correct orientation
+
                         resultImage.compress(Bitmap.CompressFormat.PNG, 0, imageOut);
                         imageOut.flush();
                         imageOut.close();
@@ -116,5 +121,14 @@ public class ResultActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+
     }
+
+    private Bitmap rotateBmp(Bitmap toRotate, float angle){
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(toRotate, 0, 0, toRotate.getWidth(), toRotate.getHeight(), matrix, true);
+    }
+
 }
